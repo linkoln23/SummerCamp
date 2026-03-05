@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Літній розклад 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Geologica:wght@300;400;600;700&family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --border: #2a2d3a;
+    --polina: #60a5fa;
+    --polina-light: rgba(96,165,250,0.15);
+    --emilia: #f472b6;
+    --emilia-light: rgba(244,114,182,0.15);
+    --art: #fbbf24;
+    --art-light: rgba(251,191,36,0.15);
+    --overlap: rgba(255,100,100,0.25);
+    --overlap-border: #ff6464;
+    --text: #e2e8f0;
+    --muted: #64748b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Geologica', sans-serif;
+    min-height: 100vh;
+    padding: 40px 32px;
+  }
+
+  header {
+    margin-bottom: 40px;
+  }
+
+  h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 2rem;
+    letter-spacing: -0.03em;
+    color: #fff;
+  }
+
+  h1 span { color: var(--art); }
+
+  .subtitle {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 12px; height: 12px;
+    border-radius: 3px;
+  }
+
+  .overlap-note {
+    background: rgba(255,100,100,0.1);
+    border: 1px solid var(--overlap-border);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 0.85rem;
+    color: #fca5a5;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  .month-headers {
+    display: grid;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .month-label {
+    text-align: center;
+    padding: 10px 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-right: 1px solid var(--border);
+  }
+
+  .month-label:last-child { border-right: none; }
+
+  .day-grid {
+    position: relative;
+    padding: 20px 0;
+  }
+
+  /* Day columns in bg */
+  .day-col-bg {
+    position: absolute;
+    top: 0; bottom: 0;
+    pointer-events: none;
+  }
+
+  .day-col-bg.weekend {
+    background: rgba(255,255,255,0.02);
+  }
+
+  /* Overlap highlight */
+  .overlap-zone {
+    position: absolute;
+    top: 0; bottom: 0;
+    background: var(--overlap);
+    border-left: 2px dashed var(--overlap-border);
+    border-right: 2px dashed var(--overlap-border);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    margin: 6px 0;
+    position: relative;
+    height: 38px;
+  }
+
+  .row-label {
+    width: 80px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    flex-shrink: 0;
+    padding-right: 12px;
+    text-align: right;
+  }
+
+  .row-track {
+    flex: 1;
+    position: relative;
+    height: 100%;
+  }
+
+  .bar {
+    position: absolute;
+    height: 28px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 8px;
+    cursor: default;
+    transition: filter 0.2s;
+    z-index: 2;
+  }
+
+  .bar:hover {
+    filter: brightness(1.2);
+    z-index: 10;
+  }
+
+  .bar.polina {
+    background: var(--polina-light);
+    border: 1.5px solid var(--polina);
+    color: var(--polina);
+  }
+
+  .bar.emilia {
+    background: var(--emilia-light);
+    border: 1.5px solid var(--emilia);
+    color: var(--emilia);
+  }
+
+  .bar.art {
+    background: var(--art-light);
+    border: 1.5px solid var(--art);
+    color: var(--art);
+  }
+
+  /* Day ticks */
+  .ticks {
+    display: flex;
+    margin-left: 80px;
+    border-top: 1px solid var(--border);
+    padding-top: 8px;
+  }
+
+  .tick {
+    flex: 1;
+    text-align: center;
+    font-size: 0.62rem;
+    color: var(--border);
+  }
+
+  .tick.labeled {
+    color: var(--muted);
+  }
+
+  /* Tooltip */
+  .tooltip {
+    position: fixed;
+    background: #1e2130;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.8rem;
+    pointer-events: none;
+    z-index: 100;
+    display: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    max-width: 220px;
+  }
+
+  .tooltip .name { font-weight: 700; margin-bottom: 3px; }
+  .tooltip .dates { color: var(--muted); font-size: 0.75rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Літо <span>2026</span></h1>
+  <p class="subtitle">Червень — Серпень · Розклад таборів та занять</p>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div> Поліна</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f472b6"></div> Емілія</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div> Обидві (художня школа)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ff6464; opacity:0.6"></div> Перетин / Конфлікт</div>
+</div>
+
+<div class="overlap-note">
+  ⚠️ Якщо практику перенести на 15.06–26.06 — Поля не встигне на Карпатай (20.06). Варіант 08.06–19.06 безпечний.
+</div>
+
+<div class="chart-wrap" id="chart">
+  <div class="month-headers" id="monthHeaders"></div>
+  <div class="day-grid" id="dayGrid">
+    <div id="overlapZones"></div>
+    <div class="row"><div class="row-label">Поліна</div><div class="row-track" id="track-polina"></div></div>
+    <div class="row"><div class="row-label">Емілія</div><div class="row-track" id="track-emilia"></div></div>
+  </div>
+  <div class="ticks" id="ticks"></div>
+</div>
+
+<div class="tooltip" id="tooltip">
+  <div class="name" id="tt-name"></div>
+  <div class="dates" id="tt-dates"></div>
+</div>
+
+<script>
+const START = new Date(2026, 5, 1); // June 1
+const END   = new Date(2026, 7, 31); // Aug 31
+const TOTAL_DAYS = Math.round((END - START) / 86400000) + 1;
+
+function dayIndex(d) {
+  return Math.round((d - START) / 86400000);
+}
+
+function pct(day) {
+  return (day / TOTAL_DAYS) * 100;
+}
+
+const events = [
+  { who: 'both',   name: 'Художня школа',       start: new Date(2026,5,8),  end: new Date(2026,5,19), cls: 'art' },
+  { who: 'polina', name: 'Табір Карпатай',       start: new Date(2026,5,20), end: new Date(2026,5,28), cls: 'polina' },
+  { who: 'emilia', name: 'Табір Пластовий',      start: new Date(2026,6,1),  end: new Date(2026,6,12), cls: 'emilia' },
+  { who: 'polina', name: 'Табір Пластовий',      start: new Date(2026,6,16), end: new Date(2026,6,25), cls: 'polina' },
+  { who: 'emilia', name: 'Табір Непрості',       start: new Date(2026,7,3),  end: new Date(2026,7,14), cls: 'emilia' },
+  { who: 'polina', name: 'Табір Строкаті єноти', start: new Date(2026,7,8),  end: new Date(2026,7,14), cls: 'polina' },
+];
+
+// Month headers
+const months = [
+  { name: 'Червень', days: 30 },
+  { name: 'Липень',  days: 31 },
+  { name: 'Серпень', days: 31 },
+];
+const mh = document.getElementById('monthHeaders');
+mh.style.gridTemplateColumns = months.map(m => `${m.days}fr`).join(' ');
+months.forEach(m => {
+  const d = document.createElement('div');
+  d.className = 'month-label';
+  d.textContent = m.name;
+  mh.appendChild(d);
+});
+
+// Draw bars
+function drawBar(trackId, event) {
+  const track = document.getElementById(trackId);
+  const s = dayIndex(event.start);
+  const e = dayIndex(event.end);
+  const bar = document.createElement('div');
+  bar.className = `bar ${event.cls}`;
+  bar.style.left = pct(s) + '%';
+  bar.style.width = pct(e - s + 1) + '%';
+  bar.textContent = event.name;
+
+  bar.addEventListener('mousemove', ev => {
+    const tt = document.getElementById('tooltip');
+    const fmt = d => d.toLocaleDateString('uk-UA', {day:'2-digit', month:'2-digit'});
+    document.getElementById('tt-name').textContent = event.name;
+    document.getElementById('tt-dates').textContent = fmt(event.start) + ' – ' + fmt(event.end);
+    tt.style.display = 'block';
+    tt.style.left = (ev.clientX + 12) + 'px';
+    tt.style.top  = (ev.clientY - 10) + 'px';
+  });
+  bar.addEventListener('mouseleave', () => {
+    document.getElementById('tooltip').style.display = 'none';
+  });
+  track.appendChild(bar);
+}
+
+events.forEach(ev => {
+  if (ev.who === 'polina') drawBar('track-polina', ev);
+  if (ev.who === 'emilia') drawBar('track-emilia', ev);
+  if (ev.who === 'both')   { drawBar('track-polina', ev); drawBar('track-emilia', ev); }
+});
+
+// Find overlaps between polina & emilia
+const polinaEvents = events.filter(e => e.who === 'polina' || e.who === 'both');
+const emiliaEvents = events.filter(e => e.who === 'emilia' || e.who === 'both');
+
+const ozContainer = document.getElementById('overlapZones');
+
+polinaEvents.forEach(pe => {
+  emiliaEvents.forEach(ee => {
+    const overlapStart = Math.max(dayIndex(pe.start), dayIndex(ee.start));
+    const overlapEnd   = Math.min(dayIndex(pe.end),   dayIndex(ee.end));
+    if (overlapStart <= overlapEnd) {
+      const oz = document.createElement('div');
+      oz.className = 'overlap-zone';
+      oz.style.left  = pct(overlapStart) + '%';
+      oz.style.width = pct(overlapEnd - overlapStart + 1) + '%';
+      ozContainer.appendChild(oz);
+    }
+  });
+});
+
+// Ticks
+const ticks = document.getElementById('ticks');
+for (let i = 0; i < TOTAL_DAYS; i++) {
+  const d = new Date(START.getTime() + i * 86400000);
+  const t = document.createElement('div');
+  const day = d.getDate();
+  t.className = 'tick' + (day % 5 === 1 || day === 1 ? ' labeled' : '');
+  t.textContent = (day % 5 === 1 || day === 1) ? day : '';
+  ticks.appendChild(t);
+}
+</script>
+</body>
+</html>
