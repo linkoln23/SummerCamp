@@ -11,11 +11,11 @@
     --surface: #1a1d27;
     --border: #2a2d3a;
     --polina: #60a5fa;
-    --polina-light: rgba(96,165,250,0.15);
+    --polina-light: rgba(96,165,250,0.18);
     --emilia: #f472b6;
-    --emilia-light: rgba(244,114,182,0.15);
+    --emilia-light: rgba(244,114,182,0.18);
     --art: #fbbf24;
-    --art-light: rgba(251,191,36,0.15);
+    --art-light: rgba(251,191,36,0.18);
     --overlap: rgba(255,100,100,0.25);
     --overlap-border: #ff6464;
     --text: #e2e8f0;
@@ -126,23 +126,33 @@
     background: rgba(255,255,255,0.02);
   }
 
-  /* Overlap highlight */
-  .overlap-zone {
+  /* Free time highlight */
+  .free-zone {
     position: absolute;
     top: 0; bottom: 0;
-    background: var(--overlap);
-    border-left: 2px dashed var(--overlap-border);
-    border-right: 2px dashed var(--overlap-border);
+    background: rgba(52, 211, 153, 0.12);
+    border-left: 2px solid #34d399;
+    border-right: 2px solid #34d399;
     pointer-events: none;
     z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .free-zone-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #34d399;
+    opacity: 0.8;
   }
 
   .row {
     display: flex;
-    align-items: center;
-    margin: 6px 0;
+    align-items: stretch;
+    margin: 4px 0;
     position: relative;
-    height: 38px;
+    height: 52px;
   }
 
   .row-label {
@@ -153,6 +163,36 @@
     flex-shrink: 0;
     padding-right: 12px;
     text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .row-track {
+    flex: 1;
+    position: relative;
+    height: 100%;
+  }
+
+  .row {
+    display: flex;
+    align-items: stretch;
+    margin: 4px 0;
+    position: relative;
+    height: 72px;
+  }
+
+  .row-label {
+    width: 80px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--muted);
+    flex-shrink: 0;
+    padding-right: 12px;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 
   .row-track {
@@ -163,48 +203,67 @@
 
   .bar {
     position: absolute;
-    height: 28px;
+    height: 6px;
     top: 50%;
     transform: translateY(-50%);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.72rem;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding: 0 8px;
+    border-radius: 3px;
     cursor: default;
     transition: filter 0.2s;
     z-index: 2;
   }
 
-  .bar:hover {
-    filter: brightness(1.2);
-    z-index: 10;
+  .bar:hover { filter: brightness(1.3); z-index: 10; }
+
+  .bar-name {
+    position: absolute;
+    top: calc(50% - 18px);
+    font-size: 0.68rem;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 4;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .bar.polina {
-    background: var(--polina-light);
-    border: 1.5px solid var(--polina);
-    color: var(--polina);
+  .bar-days {
+    position: absolute;
+    top: calc(50% + 12px);
+    font-size: 0.6rem;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 4;
+    opacity: 0.75;
   }
 
-  .bar.emilia {
-    background: var(--emilia-light);
-    border: 1.5px solid var(--emilia);
-    color: var(--emilia);
+  .bar.polina { background: var(--polina); }
+  .bar-name.polina, .bar-days.polina { color: var(--polina); }
+
+  .bar.emilia { background: var(--emilia); }
+  .bar-name.emilia, .bar-days.emilia { color: var(--emilia); }
+
+  .bar.art { background: var(--art); }
+  .bar-name.art, .bar-days.art { color: var(--art); }
+
+  .gap-label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.6rem;
+    color: #475569;
+    white-space: nowrap;
+    text-align: center;
+    pointer-events: none;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.3;
   }
 
-  .bar.art {
-    background: var(--art-light);
-    border: 1.5px solid var(--art);
-    color: var(--art);
-  }
+  .gap-label .g-days { font-weight: 700; font-size: 0.65rem; color: #64748b; }
+  .gap-label .g-text { font-size: 0.55rem; color: #3d4a5c; }
 
-  /* Day ticks */
   .ticks {
     display: flex;
     margin-left: 80px;
@@ -240,6 +299,58 @@
 
   .tooltip .name { font-weight: 700; margin-bottom: 3px; }
   .tooltip .dates { color: var(--muted); font-size: 0.75rem; }
+
+  .observations {
+    margin-top: 40px;
+  }
+
+  .observations h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .obs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  .obs-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .obs-card.beach  { border-left: 3px solid #34d399; }
+  .obs-card.parents { border-left: 3px solid #a78bfa; }
+  .obs-card.warning { border-left: 3px solid #f97316; }
+  .obs-card.info   { border-left: 3px solid var(--border); }
+
+  .obs-icon { font-size: 1.3rem; line-height: 1; flex-shrink: 0; margin-top: 1px; }
+
+  .obs-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .obs-text {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .obs-text strong { color: var(--text); }
 </style>
 </head>
 <body>
@@ -252,8 +363,8 @@
 <div class="legend">
   <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div> Поліна</div>
   <div class="legend-item"><div class="legend-dot" style="background:#f472b6"></div> Емілія</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div> Обидві (художня школа)</div>
-  <div class="legend-item"><div class="legend-dot" style="background:#ff6464; opacity:0.6"></div> Перетин / Конфлікт</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#fbbf24"></div> Разом в таборі</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div> Обидві вільні 🏖️</div>
 </div>
 
 <div class="overlap-note">
@@ -263,9 +374,9 @@
 <div class="chart-wrap" id="chart">
   <div class="month-headers" id="monthHeaders"></div>
   <div class="day-grid" id="dayGrid">
-    <div id="overlapZones"></div>
     <div class="row"><div class="row-label">Поліна</div><div class="row-track" id="track-polina"></div></div>
     <div class="row"><div class="row-label">Емілія</div><div class="row-track" id="track-emilia"></div></div>
+    <div id="overlapZones" style="position:absolute; top:0; bottom:0; left:80px; right:0; pointer-events:none; z-index:1;"></div>
   </div>
   <div class="ticks" id="ticks"></div>
 </div>
@@ -273,6 +384,54 @@
 <div class="tooltip" id="tooltip">
   <div class="name" id="tt-name"></div>
   <div class="dates" id="tt-dates"></div>
+</div>
+
+<div class="observations">
+  <h2>Спостереження</h2>
+  <div class="obs-grid">
+    <div class="obs-card beach">
+      <div class="obs-icon">🏖️</div>
+      <div class="obs-content">
+        <div class="obs-title">Найкраще вікно для моря</div>
+        <div class="obs-text">26 липня – 2 серпня — <strong>7 днів</strong> коли обидві вільні. Ідеально для сімейної поїздки.</div>
+      </div>
+    </div>
+    <div class="obs-card beach">
+      <div class="obs-icon">☀️</div>
+      <div class="obs-content">
+        <div class="obs-title">Велике вікно в кінці літа</div>
+        <div class="obs-text">15–31 серпня — <strong>17 днів</strong> після всіх таборів. Можна планувати довшу поїздку.</div>
+      </div>
+    </div>
+    <div class="obs-card parents">
+      <div class="obs-icon">🎉</div>
+      <div class="obs-content">
+        <div class="obs-title">Тиждень без дітей</div>
+        <div class="obs-text">8–14 серпня обидві одночасно в таборах (Непрості + Строкаті єноти). Ваш особистий тиждень!</div>
+      </div>
+    </div>
+    <div class="obs-card warning">
+      <div class="obs-icon">⚠️</div>
+      <div class="obs-content">
+        <div class="obs-title">Логістика Поліни 19–20 червня</div>
+        <div class="obs-text">Художня школа закінчується 19.06, Карпатай починається 20.06 — жодного дня на перепочинок.</div>
+      </div>
+    </div>
+    <div class="obs-card info">
+      <div class="obs-icon">🤔</div>
+      <div class="obs-content">
+        <div class="obs-title">Пластовий в різний час</div>
+        <div class="obs-text">Обидві їдуть до Пластового, але в різні зміни — Емілія 1–12 липня, Поліна 16–25 липня. Навмисно?</div>
+      </div>
+    </div>
+    <div class="obs-card info">
+      <div class="obs-icon">📅</div>
+      <div class="obs-content">
+        <div class="obs-title">Коротке вікно наприкінці червня</div>
+        <div class="obs-text">29–30 червня — лише <strong>2 дні</strong>. Замало для поїздки, але можна виїхати на вихідні.</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -289,12 +448,12 @@ function pct(day) {
 }
 
 const events = [
-  { who: 'both',   name: 'Художня школа',       start: new Date(2026,5,8),  end: new Date(2026,5,19), cls: 'art' },
-  { who: 'polina', name: 'Табір Карпатай',       start: new Date(2026,5,20), end: new Date(2026,5,28), cls: 'polina' },
-  { who: 'emilia', name: 'Табір Пластовий',      start: new Date(2026,6,1),  end: new Date(2026,6,12), cls: 'emilia' },
-  { who: 'polina', name: 'Табір Пластовий',      start: new Date(2026,6,16), end: new Date(2026,6,25), cls: 'polina' },
-  { who: 'emilia', name: 'Табір Непрості',       start: new Date(2026,7,3),  end: new Date(2026,7,14), cls: 'emilia' },
-  { who: 'polina', name: 'Табір Строкаті єноти', start: new Date(2026,7,8),  end: new Date(2026,7,14), cls: 'polina' },
+  { who: 'both',   name: 'Художня школа',   start: new Date(2026,5,8),  end: new Date(2026,5,19), cls: 'art' },
+  { who: 'polina', name: 'Карпатай',         start: new Date(2026,5,20), end: new Date(2026,5,28), cls: 'polina' },
+  { who: 'emilia', name: 'Пластовий',        start: new Date(2026,6,1),  end: new Date(2026,6,12), cls: 'emilia' },
+  { who: 'polina', name: 'Пластовий',        start: new Date(2026,6,16), end: new Date(2026,6,25), cls: 'polina' },
+  { who: 'emilia', name: 'Непрості',         start: new Date(2026,7,3),  end: new Date(2026,7,14), cls: 'emilia' },
+  { who: 'polina', name: 'Строкаті єноти',   start: new Date(2026,7,8),  end: new Date(2026,7,14), cls: 'polina' },
 ];
 
 // Month headers
@@ -317,25 +476,67 @@ function drawBar(trackId, event) {
   const track = document.getElementById(trackId);
   const s = dayIndex(event.start);
   const e = dayIndex(event.end);
+  const days = e - s + 1;
+  const leftPct = pct(s);
+  const widthPct = pct(days);
+
   const bar = document.createElement('div');
   bar.className = `bar ${event.cls}`;
-  bar.style.left = pct(s) + '%';
-  bar.style.width = pct(e - s + 1) + '%';
-  bar.textContent = event.name;
+  bar.style.left = leftPct + '%';
+  bar.style.width = widthPct + '%';
 
-  bar.addEventListener('mousemove', ev => {
-    const tt = document.getElementById('tooltip');
-    const fmt = d => d.toLocaleDateString('uk-UA', {day:'2-digit', month:'2-digit'});
-    document.getElementById('tt-name').textContent = event.name;
-    document.getElementById('tt-dates').textContent = fmt(event.start) + ' – ' + fmt(event.end);
-    tt.style.display = 'block';
-    tt.style.left = (ev.clientX + 12) + 'px';
-    tt.style.top  = (ev.clientY - 10) + 'px';
+  const nameEl = document.createElement('div');
+  nameEl.className = `bar-name ${event.cls}`;
+  nameEl.style.left = leftPct + '%';
+  nameEl.style.maxWidth = widthPct + '%';
+  nameEl.textContent = event.name;
+
+  const daysEl = document.createElement('div');
+  daysEl.className = `bar-days ${event.cls}`;
+  daysEl.style.left = leftPct + '%';
+  daysEl.textContent = days + ' дн.';
+
+  const fmt = d => d.toLocaleDateString('uk-UA', {day:'2-digit', month:'2-digit'});
+  [bar, nameEl, daysEl].forEach(el => {
+    el.addEventListener('mousemove', ev => {
+      const tt = document.getElementById('tooltip');
+      document.getElementById('tt-name').textContent = event.name;
+      document.getElementById('tt-dates').textContent = fmt(event.start) + ' – ' + fmt(event.end) + ' (' + days + ' дн.)';
+      tt.style.display = 'block';
+      tt.style.left = (ev.clientX + 12) + 'px';
+      tt.style.top  = (ev.clientY - 10) + 'px';
+    });
+    el.addEventListener('mouseleave', () => {
+      document.getElementById('tooltip').style.display = 'none';
+    });
   });
-  bar.addEventListener('mouseleave', () => {
-    document.getElementById('tooltip').style.display = 'none';
-  });
+
   track.appendChild(bar);
+  track.appendChild(nameEl);
+  track.appendChild(daysEl);
+}
+
+function drawGaps(trackId, evList) {
+  const track = document.getElementById(trackId);
+  const sorted = [...evList].sort((a, b) => a.start - b.start);
+  for (let i = 0; i < sorted.length - 1; i++) {
+    const gapStart = dayIndex(sorted[i].end) + 1;
+    const gapEnd   = dayIndex(sorted[i+1].start) - 1;
+    if (gapEnd < gapStart) continue;
+    const gapDays = gapEnd - gapStart + 1;
+    const midPct  = pct(gapStart + (gapDays / 2));
+    const widthPct = (gapDays / TOTAL_DAYS) * 100;
+
+    const lbl = document.createElement('div');
+    lbl.className = 'gap-label';
+    lbl.style.left = midPct + '%';
+    lbl.style.transform = 'translate(-50%, -50%)';
+
+    if (widthPct > 2) {
+      lbl.innerHTML = `<span class="g-days">${gapDays}д</span><span class="g-text">перерва</span>`;
+    }
+    track.appendChild(lbl);
+  }
 }
 
 events.forEach(ev => {
@@ -344,25 +545,54 @@ events.forEach(ev => {
   if (ev.who === 'both')   { drawBar('track-polina', ev); drawBar('track-emilia', ev); }
 });
 
-// Find overlaps between polina & emilia
-const polinaEvents = events.filter(e => e.who === 'polina' || e.who === 'both');
-const emiliaEvents = events.filter(e => e.who === 'emilia' || e.who === 'both');
+// Draw gap labels
+const polinaAll = events.filter(e => e.who === 'polina' || e.who === 'both');
+const emiliaAll = events.filter(e => e.who === 'emilia' || e.who === 'both');
+drawGaps('track-polina', polinaAll);
+drawGaps('track-emilia', emiliaAll);
 
 const ozContainer = document.getElementById('overlapZones');
 
-polinaEvents.forEach(pe => {
-  emiliaEvents.forEach(ee => {
-    const overlapStart = Math.max(dayIndex(pe.start), dayIndex(ee.start));
-    const overlapEnd   = Math.min(dayIndex(pe.end),   dayIndex(ee.end));
-    if (overlapStart <= overlapEnd) {
-      const oz = document.createElement('div');
-      oz.className = 'overlap-zone';
-      oz.style.left  = pct(overlapStart) + '%';
-      oz.style.width = pct(overlapEnd - overlapStart + 1) + '%';
-      ozContainer.appendChild(oz);
-    }
+// Find periods when BOTH are free (neither has any event)
+const allEvents = events; // all events combined
+
+function getBusyDays(who) {
+  const busy = new Set();
+  allEvents.filter(e => e.who === who || e.who === 'both').forEach(e => {
+    const s = dayIndex(e.start), en = dayIndex(e.end);
+    for (let d = s; d <= en; d++) busy.add(d);
   });
-});
+  return busy;
+}
+
+const polinaBusy = getBusyDays('polina');
+const emiliaBusy = getBusyDays('emilia');
+
+// Find contiguous free stretches
+let freeStart = null;
+for (let d = 0; d <= TOTAL_DAYS; d++) {
+  const bothFree = !polinaBusy.has(d) && !emiliaBusy.has(d) && d < TOTAL_DAYS;
+  if (bothFree && freeStart === null) {
+    freeStart = d;
+  } else if (!bothFree && freeStart !== null) {
+    const freeDays = d - freeStart;
+    const oz = document.createElement('div');
+    oz.className = 'free-zone';
+    oz.style.left  = pct(freeStart) + '%';
+    oz.style.width = pct(freeDays) + '%';
+
+    const fmtD = i => {
+      const dt = new Date(START.getTime() + i * 86400000);
+      return dt.toLocaleDateString('uk-UA', {day:'2-digit', month:'2-digit'});
+    };
+    const lbl = document.createElement('div');
+    lbl.className = 'free-zone-label';
+    lbl.textContent = freeDays + ' дн.';
+    oz.appendChild(lbl);
+    ozContainer.appendChild(oz);
+    freeStart = null;
+  }
+}
 
 // Ticks
 const ticks = document.getElementById('ticks');
