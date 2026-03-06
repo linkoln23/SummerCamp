@@ -32,6 +32,10 @@
     padding: 40px 32px;
   }
 
+  @media (max-width: 600px) {
+    body { padding: 20px 16px; }
+  }
+
   header {
     margin-bottom: 40px;
   }
@@ -351,6 +355,37 @@
   }
 
   .obs-text strong { color: var(--text); }
+
+  /* ── Mobile ── */
+  @media (max-width: 600px) {
+    h1 { font-size: 1.4rem; }
+
+    .legend { gap: 12px; }
+    .legend-item { font-size: 0.78rem; }
+
+    .overlap-note { font-size: 0.78rem; padding: 10px 14px; }
+
+    /* Chart scrolls horizontally */
+    .chart-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 12px;
+    }
+
+    .chart-inner {
+      min-width: 600px;
+    }
+
+    .observations h2 { font-size: 0.85rem; }
+
+    .obs-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .obs-card { padding: 12px 14px; }
+    .obs-title { font-size: 0.78rem; }
+    .obs-text { font-size: 0.74rem; }
+  }
 </style>
 </head>
 <body>
@@ -372,13 +407,15 @@
 </div>
 
 <div class="chart-wrap" id="chart">
-  <div class="month-headers" id="monthHeaders"></div>
-  <div class="day-grid" id="dayGrid">
-    <div class="row"><div class="row-label">Поліна</div><div class="row-track" id="track-polina"></div></div>
-    <div class="row"><div class="row-label">Емілія</div><div class="row-track" id="track-emilia"></div></div>
-    <div id="overlapZones" style="position:absolute; top:0; bottom:0; left:80px; right:0; pointer-events:none; z-index:1;"></div>
+  <div class="chart-inner">
+    <div class="month-headers" id="monthHeaders"></div>
+    <div class="day-grid" id="dayGrid">
+      <div class="row"><div class="row-label">Поліна</div><div class="row-track" id="track-polina"></div></div>
+      <div class="row"><div class="row-label">Емілія</div><div class="row-track" id="track-emilia"></div></div>
+      <div id="overlapZones" style="position:absolute; top:0; bottom:0; left:80px; right:0; pointer-events:none; z-index:1;"></div>
+    </div>
+    <div class="ticks" id="ticks"></div>
   </div>
-  <div class="ticks" id="ticks"></div>
 </div>
 
 <div class="tooltip" id="tooltip">
